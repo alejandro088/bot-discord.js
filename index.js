@@ -20,7 +20,7 @@ const config = require("./config.json");
  */
 client.on('ready', () => {
 	console.log('I am ready!');
-	client.user.setActivity("Escriba !elo <username>");
+	client.user.setActivity("Type !help for Help");
 });
 
 client.commands = new Enmap();
