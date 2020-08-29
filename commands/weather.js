@@ -1,4 +1,4 @@
-const config = require("../config.json");
+const config = require("../config.js");
 const request = require('request');
 
 exports.run = (client, message, [...city]) => {

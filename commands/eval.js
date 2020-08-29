@@ -1,4 +1,4 @@
-const config = require("../config.json");
+const config = require("../config.js");
 
 function clean(text) {
     if (typeof(text) === "string")
