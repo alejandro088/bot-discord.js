@@ -12,7 +12,7 @@ const fs = require("fs");
 
 // Create an instance of a Discord client
 const client = new Client();
-const config = require("./config.json");
+const config = require("./config.js");
 
 /**
  * The ready event is vital, it means that only _after_ this will your bot start reacting to information
