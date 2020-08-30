@@ -1,42 +1,58 @@
 const config = require("../config.js");
-const request = require('request');
 const { Octokit } = require("@octokit/core");
 const { RichEmbed } = require('discord.js');
 
 exports.run = async (client, message, [...args]) => {
-    
-    const octokit = new Octokit({ auth: `${config.githubToken}` });
-    let result = await octokit.pulls.list({
-          'escuelavirtual',
-          'backend',
-        });
+    if (args[0] != 'pulls'){
 
-      let discordlist = await result
-      
-      //data = await JSON.parse(discordlist)
-      let pullRequests = await discordlist
+        const embed = await new RichEmbed()
+        // Set the title of the field
+        .setTitle('Argument not found')
+        // Set the color of the embed
+        .setColor(0xFF0000);
 
-      const embed = await new RichEmbed()
-                // Set the title of the field
-                .setTitle('Pull Requests for Backend')
-                // Set the color of the embed
-                .setColor(0xFF0000)
-      
-            pullRequests.foreach(pull => {
-                  embed.addField(pull.data.title);
-                  embed.addField(pull.data.url);
+        embed.addField("Try again, Arguments availables", "pulls [repo], example: pulls backend");
 
-            })
+        return message.channel.send(embed);
+
+    } else if (args[0] === 'pulls'){
+        const octokit = new Octokit({ auth: `${config.githubToken}` });
+        let result = await octokit.request('GET /repos/{owner}/{repo}/pulls', {
+            owner: "escuelavirtual",
+            repo: args[1]
+            });
+
+        //data = await JSON.parse(discordlist)
+        const pullRequests = await result.data
+        //console.log(pullRequests)
+
+        if (pullRequests.length == 0) { return message.channel.send(`**Not found pull requests opens**`); }
+        
+        
      
-      
-        message.channel.send(embed);
-      
-    
+        const embed = await new RichEmbed()
+            // Set the title of the field
+            .setTitle('Pull Requests')
+            // Set the color of the embed
+            .setColor(0xFF0000);
+
+        let max = 12;
+        let i = 0;
+
+        await pullRequests.forEach(pull => {
+            if (i < max) {
+                embed.addField(pull.title, pull.html_url);
+                i++;
+            }
+        })         
+        message.channel.send(embed);     
+
+    }
 
 }
 
 exports.help = {
     name: 'Github',
     desc: 'View Open Pull Requests',
-    usage: `Github Pull Requests, example: ${config.prefix}github`
+    usage: `Github Pull Requests, example: ${config.prefix}github pulls backend`
 }
