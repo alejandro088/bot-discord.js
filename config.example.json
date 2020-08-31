@@ -1,0 +1,7 @@
+{
+    "prefix": "!",
+    "token": TOKEN_BOT_DISCORD,
+    "weatherApiKey": API_KEY_WEATHER,
+    "githubToken": GITHUB_TOKEN,
+    "ownerID": OWNER_ID
+}s
